@@ -10,7 +10,8 @@ class TaskForm extends React.Component {
         assignee: "User",
         progress: "80",
         start: "2020-11-23",
-        end: "2021-11-23"
+        end: "2021-11-23",
+        state: "ToDo"
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -36,7 +37,8 @@ class TaskForm extends React.Component {
         assignee: "",
         progress: "",
         start: "",
-        end: ""
+        end: "",
+        state: "ToDo"
     })
     
     event.preventDefault();
@@ -44,8 +46,8 @@ class TaskForm extends React.Component {
 
   render() {
     return (
-      <form onSubmit = {this.addTask}>
-        <div className="container">
+      <form onSubmit = {this.addTask} className="container">
+        <div>
       <label>Create new task</label>
 
         <div className="input-group">

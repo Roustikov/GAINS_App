@@ -5,6 +5,17 @@
 .container {
   border: solid #333333 1px;
   width: 30%;
+  flex-flow: column;
+  display: flex;
+  margin: 5px;
+}
+
+.container.wide {
+  width: 50%;
+}
+
+.wrapper {
+  display: flex;
 }
 
 .container .add-task-button {
