@@ -20,34 +20,49 @@ class App extends React.Component {
                 { id:"Task2", name:"Test2", state: "ToDo", start:"2020-11-21", end:"2021-04-24", progress:"10", dependencies:"" },
                 { id:"Task3", name:"Test3", state: "ToDo", start:"2020-11-23", end:"2021-04-26", progress:"30", dependencies:"Task1,Task2" },
                 { id:"Task4", name:"Test4", state: "ToDo", start:"2020-11-23", end:"2021-06-26", progress:"10", dependencies:"Task3" },
-            ], 
+            ],
             board: {
-                columns: [
-                  {
-                    id: 1,
-                    title: 'ToDo:',
-                    cards: []
-                  },
-                  {
-                    id: 2,
-                    title: 'Done:',
-                    cards: []
-                  }
-                ]
+                columns: {}
             }
         };
 
-        this.state.done = this.state.tasks.filter(item => {if(item.state==="Done"){item.title=item.name; return item}});
-        this.state.todo = this.state.tasks.filter(item => {if(item.state==="ToDo"){item.title=item.name; return item}});
-        this.state.board.columns[0].cards = this.state.todo;
-        this.state.board.columns[1].cards = this.state.done;
+        Object.defineProperty(this.state, "board", {
+            get : function () {
+                
+            }
+        });
     }
     
+    taskDragEnd(board, card, source, destination) {
+        let changedState = [...this.state.tasks];
+        let index = this.state.tasks.findIndex(element => element.id == card.id );
+        changedState[index] = {...changedState[index], state: destination.toColumnId == 1 ? "ToDo" : "Done"};
+        this.setState({tasks: changedState}, ()=>{console.log(this.state)});
+    }
+
     addTask = (taskData) => {
         this.state.tasks.push(taskData);
         this.setState(this.state);
     }
     
+    getBoard(){
+        let columns = [
+            {
+              id: 1,
+              title: 'ToDo:',
+              cards: []
+            },
+            {
+              id: 2,
+              title: 'Done:',
+              cards: []
+            }
+          ];
+        columns[0].cards = this.state.tasks.filter(item => {item.title=item.name; return item.state==="ToDo";});
+        columns[1].cards = this.state.tasks.filter(item => {item.title=item.name; return item.state==="Done";});
+        return {columns: columns};
+    }
+
     getTasks(){
         return this.state.tasks;
     }
@@ -72,7 +87,7 @@ class App extends React.Component {
 
             <TabPanel>
                 <div>
-                <Board initialBoard={this.state.board} />
+                <Board initialBoard={this.getBoard()} onCardDragEnd={this.taskDragEnd.bind(this)}/>
                 </div>
             </TabPanel>
 

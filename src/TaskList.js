@@ -7,7 +7,9 @@ class TaskList extends React.Component {
         let tasks = this.props.tasks.map(task => {return <Task task={task} key={task.id}/>});
         
         return(
-        <div className="container wide">{tasks}</div>
+        <div className="container wide">
+            <label>Task List</label>
+            {tasks}</div>
         )
     }
 }

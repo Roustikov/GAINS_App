@@ -4,14 +4,14 @@
 
 .container {
   border: solid #333333 1px;
-  width: 30%;
+  flex-grow: 1;
   flex-flow: column;
   display: flex;
   margin: 5px;
 }
 
 .container.wide {
-  width: 50%;
+  flex-grow: 2;
 }
 
 .wrapper {
