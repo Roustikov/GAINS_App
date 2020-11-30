@@ -8,6 +8,9 @@ import 'react-tabs/style/react-tabs.css';
 import Board from '@lourenci/react-kanban'
 import '@lourenci/react-kanban/dist/styles.css'
 
+import { Diagram, iconClassName, Icon } from '@blink-mind/renderer-react';
+import { Model } from "@blink-mind/core";
+
 var React = require('react');
 
 class App extends React.Component {
@@ -23,15 +26,16 @@ class App extends React.Component {
             ],
             board: {
                 columns: {}
+            },
+            model: {
             }
         };
-
-        Object.defineProperty(this.state, "board", {
-            get : function () {
-                
-            }
-        });
+        this.state.model = this.generateSimpleModel();
     }
+
+    diagramRef(ref){
+        this.state.diagram = ref;
+    };
     
     taskDragEnd(board, card, source, destination) {
         let changedState = [...this.state.tasks];
@@ -67,6 +71,24 @@ class App extends React.Component {
         return this.state.tasks;
     }
 
+    generateSimpleModel() {
+        const rootKey = "TestRootKey!";//createKey();
+      
+        return Model.create({
+          rootTopicKey: rootKey,
+          topics: [
+            {
+              key: rootKey,
+              blocks: [{ type: "CONTENT", data: "Tasks" }]
+            }
+          ]
+        });
+    }
+
+    onMindMapChange = (model, callback) => {
+        this.setState({model: model}, callback);
+    };
+
     render() {
         return (
             <div className="App">
@@ -92,6 +114,14 @@ class App extends React.Component {
             </TabPanel>
 
             <TabPanel>
+                <div className="mindmap">
+                <Diagram
+                    model={this.state.model}
+                    onChange={this.onMindMapChange}
+                    plugins={[]}
+                    ref={this.diagramRef.bind(this)}
+                />
+                </div>
             </TabPanel>
 
             <TabPanel>

@@ -2,6 +2,15 @@
   text-align: center;
 }
 
+#root {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
 .container {
   border: solid #333333 1px;
   flex-grow: 1;
@@ -16,6 +25,11 @@
 
 .wrapper {
   display: flex;
+}
+
+.mindmap {
+  width: 100vw;
+  height: calc(100vh - 36px);
 }
 
 .container .add-task-button {
