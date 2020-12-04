@@ -14,7 +14,9 @@ import {
     NodeModel,
     TextModel,
     MindMap,
-    NodeConstraints
+    NodeConstraints,
+    ConnectorShape,
+    Decorator
 } from "@syncfusion/ej2-react-diagrams";
 import {
     DataManager,
@@ -26,9 +28,7 @@ class MindMapContainer extends React.Component {
   state: {items:DataManager};
   constructor(props: any) {
     super(props);
-
-this.state = {items:new DataManager(props.mindMap as JSON[], new Query().take(7))};
-
+    this.state = {items:new DataManager(props.mindMap as JSON[])};
 }
 
   render() {
@@ -89,9 +89,10 @@ this.state = {items:new DataManager(props.mindMap as JSON[], new Query().take(7)
                     strokeColor: '#6BA5D7',
                     strokeWidth: 2
                 };
-                connector.targetDecorator!.style!.fill = '#6BA5D7';
-                connector!.targetDecorator!.style!.strokeColor = '#6BA5D7';
-                connector.type = 'Orthogonal';
+                connector.targetDecorator!.shape = "None"
+                connector.targetDecorator!.style!.strokeColor = '#6BA5D7';
+                connector.type = 'Bezier';
+                
                 return connector;
             }
         }
