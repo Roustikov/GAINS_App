@@ -50,6 +50,7 @@ class TaskForm extends React.Component {
         <div className="input-group">
         <label>Title:</label>
         <input
+          className="input-value"
           name="name"
           type="input"
           value={this.state.name}
@@ -59,6 +60,7 @@ class TaskForm extends React.Component {
         <div className="input-group">
         <label>Description:</label>
           <input
+            className="input-value"
             name="description"
             type="text"
             value={this.state.description}
@@ -68,6 +70,7 @@ class TaskForm extends React.Component {
         <div className="input-group">
         <label>Assignee:</label>
           <input
+            className="input-value"
             name="assignee"
             type="text"
             value={this.state.assignee}
@@ -77,6 +80,7 @@ class TaskForm extends React.Component {
         <div className="input-group">
         <label>Progress:</label>
           <input
+            className="input-value"
             name="progress"
             type="text"
             value={this.state.progress}
@@ -86,6 +90,7 @@ class TaskForm extends React.Component {
         <div className="input-group">
         <label>Start date:</label>
           <input
+            className="input-value"
             name="start"
             type="text"
             value={this.state.start}
@@ -95,6 +100,7 @@ class TaskForm extends React.Component {
         <div className="input-group">
         <label>End date:</label>
           <input
+            className="input-value"
             name="end"
             type="text"
             value={this.state.end}
@@ -104,6 +110,7 @@ class TaskForm extends React.Component {
         <div className="input-group">
         <label>Dependency:</label>
           <select name="dependencies"
+            className="input-value"
             type="text"
             value={this.state.dependencies}
             onChange={this.handleInputChange}>
