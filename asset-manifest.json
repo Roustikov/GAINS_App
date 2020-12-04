@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/GAINS_App/static/css/main.9d9f986b.chunk.css",
-    "main.js": "/GAINS_App/static/js/main.0b4e515b.chunk.js",
-    "main.js.map": "/GAINS_App/static/js/main.0b4e515b.chunk.js.map",
+    "main.css": "/GAINS_App/static/css/main.d42ccfab.chunk.css",
+    "main.js": "/GAINS_App/static/js/main.dcf2e8a3.chunk.js",
+    "main.js.map": "/GAINS_App/static/js/main.dcf2e8a3.chunk.js.map",
     "runtime-main.js": "/GAINS_App/static/js/runtime-main.1e233b6f.js",
     "runtime-main.js.map": "/GAINS_App/static/js/runtime-main.1e233b6f.js.map",
     "static/css/2.7bd66dd0.chunk.css": "/GAINS_App/static/css/2.7bd66dd0.chunk.css",
@@ -10,14 +10,14 @@
     "static/js/2.26bd1b33.chunk.js.map": "/GAINS_App/static/js/2.26bd1b33.chunk.js.map",
     "index.html": "/GAINS_App/index.html",
     "static/css/2.7bd66dd0.chunk.css.map": "/GAINS_App/static/css/2.7bd66dd0.chunk.css.map",
-    "static/css/main.9d9f986b.chunk.css.map": "/GAINS_App/static/css/main.9d9f986b.chunk.css.map",
+    "static/css/main.d42ccfab.chunk.css.map": "/GAINS_App/static/css/main.d42ccfab.chunk.css.map",
     "static/js/2.26bd1b33.chunk.js.LICENSE.txt": "/GAINS_App/static/js/2.26bd1b33.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.1e233b6f.js",
     "static/css/2.7bd66dd0.chunk.css",
     "static/js/2.26bd1b33.chunk.js",
-    "static/css/main.9d9f986b.chunk.css",
-    "static/js/main.0b4e515b.chunk.js"
+    "static/css/main.d42ccfab.chunk.css",
+    "static/js/main.dcf2e8a3.chunk.js"
   ]
 }
