@@ -3,16 +3,7 @@ var React = require('react');
 class TaskForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-        id: "Task6",
-        name: "Task6",
-        description: "Test",
-        assignee: "User",
-        progress: "80",
-        start: "2020-11-23",
-        end: "2021-11-23",
-        state: "ToDo"
-    };
+    this.state = this.getNewForm();
 
     this.handleInputChange = this.handleInputChange.bind(this);
   }
@@ -27,20 +18,26 @@ class TaskForm extends React.Component {
     });
   }
 
+  getNewForm(){
+    let nextId = Math.max(...this.props.tasks.map(task=>task.id.replace('Task','')))+1;
+    return (
+    {
+        id: "Task"+nextId,
+        name: "Test"+nextId,
+        description: "Test",
+        assignee: "User",
+        progress: nextId,
+        start: "2020-11-23",
+        end: "2021-11-23",
+        state: "ToDo",
+        dependencies: ''
+    })
+  }
+
   addTask = (event) => {
     this.props.addTaskCallback(this.state);
-    // generate new id
-    this.setState({
-        id: "",
-        name: "",
-        description: "",
-        assignee: "",
-        progress: "",
-        start: "",
-        end: "",
-        state: "ToDo"
-    })
-    
+    // generate new id 
+    this.setState(this.getNewForm()); 
     event.preventDefault();
   }
 
@@ -103,6 +100,18 @@ class TaskForm extends React.Component {
             value={this.state.end}
             onChange={this.handleInputChange} />
         </div>
+
+        <div className="input-group">
+        <label>Dependency:</label>
+          <select name="dependencies"
+            type="text"
+            value={this.state.dependencies}
+            onChange={this.handleInputChange}>
+              <option value=""> </option>
+            {this.props.tasks.map(task=>{return <option value={task.id} key={task.id}>{task.id}</option>})}
+          </select>
+        </div>
+
         <input className="add-task-button" type="submit" value = "Add task"/>
         </div>
       </form>

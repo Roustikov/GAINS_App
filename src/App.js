@@ -94,7 +94,7 @@ class App extends React.Component {
             
             <TabPanel>
             <div className="wrapper">
-                <TaskForm addTaskCallback={this.addTask}></TaskForm>
+                <TaskForm addTaskCallback={this.addTask} tasks={this.state.tasks}></TaskForm>
                 <TaskList tasks={this.state.tasks}></TaskList>
             </div>
             </TabPanel>

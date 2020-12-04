@@ -4,7 +4,7 @@ class Task extends React.Component {
 
     render() {
         return(
-        <div>Id:{this.props.task.id} Name:{this.props.task.name} State: {this.props.task.state} Start:{this.props.task.start} End:{this.props.task.end}</div>
+        <div>Id:{this.props.task.id} Name:{this.props.task.name} State: {this.props.task.state} Start:{this.props.task.start} End:{this.props.task.end} Depends on: {this.props.task.dependencies}</div>
         )
     }
 }
