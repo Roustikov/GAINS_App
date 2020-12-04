@@ -8,8 +8,7 @@ import 'react-tabs/style/react-tabs.css';
 import Board from '@lourenci/react-kanban'
 import '@lourenci/react-kanban/dist/styles.css'
 
-import { Diagram, iconClassName, Icon } from '@blink-mind/renderer-react';
-import { Model } from "@blink-mind/core";
+import MindMapContainer from './mindMap.tsx'
 
 var React = require('react');
 
@@ -20,22 +19,15 @@ class App extends React.Component {
             viewMode: "Month",
             tasks: [
                 { id:"Task1", name:"Test1", state: "Done", start:"2020-11-20", end:"2021-02-24", progress:"100", dependencies:"" },
-                { id:"Task2", name:"Test2", state: "ToDo", start:"2020-11-21", end:"2021-04-24", progress:"10", dependencies:"" },
-                { id:"Task3", name:"Test3", state: "ToDo", start:"2020-11-23", end:"2021-04-26", progress:"30", dependencies:"Task1,Task2" },
+                { id:"Task2", name:"Test2", state: "ToDo", start:"2020-11-21", end:"2021-04-24", progress:"10", dependencies:"Task1" },
+                { id:"Task3", name:"Test3", state: "ToDo", start:"2020-11-23", end:"2021-04-26", progress:"30", dependencies:"Task1" },
                 { id:"Task4", name:"Test4", state: "ToDo", start:"2020-11-23", end:"2021-06-26", progress:"10", dependencies:"Task3" },
             ],
             board: {
                 columns: {}
             },
-            model: {
-            }
         };
-        this.state.model = this.generateSimpleModel();
     }
-
-    diagramRef(ref){
-        this.state.diagram = ref;
-    };
     
     taskDragEnd(board, card, source, destination) {
         let changedState = [...this.state.tasks];
@@ -67,27 +59,27 @@ class App extends React.Component {
         return {columns: columns};
     }
 
+    getMindMap(){
+        let mapData = [{
+            id: "1",
+            Label: 'Project'
+        }];
+
+        this.state.tasks.map(task=>{
+            mapData.push({
+                id: task.id,
+                Label: task.name,
+                parentId: task.dependencies ? task.dependencies.split(',') : "1"
+            })
+        });
+        
+
+        return mapData;
+    }
+
     getTasks(){
         return this.state.tasks;
     }
-
-    generateSimpleModel() {
-        const rootKey = "TestRootKey!";//createKey();
-      
-        return Model.create({
-          rootTopicKey: rootKey,
-          topics: [
-            {
-              key: rootKey,
-              blocks: [{ type: "CONTENT", data: "Tasks" }]
-            }
-          ]
-        });
-    }
-
-    onMindMapChange = (model, callback) => {
-        this.setState({model: model}, callback);
-    };
 
     render() {
         return (
@@ -114,14 +106,7 @@ class App extends React.Component {
             </TabPanel>
 
             <TabPanel>
-                <div className="mindmap">
-                <Diagram
-                    model={this.state.model}
-                    onChange={this.onMindMapChange}
-                    plugins={[]}
-                    ref={this.diagramRef.bind(this)}
-                />
-                </div>
+                <MindMapContainer mindMap={this.getMindMap()}/>
             </TabPanel>
 
             <TabPanel>

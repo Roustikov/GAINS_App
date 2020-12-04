@@ -27,11 +27,6 @@
   display: flex;
 }
 
-.mindmap {
-  width: 100vw;
-  height: calc(100vh - 36px);
-}
-
 .container .add-task-button {
   margin-top: 5%;
   margin-bottom: 4%;
@@ -44,4 +39,12 @@
     display:flex;
     justify-content:space-between;
     flex-wrap:wrap;
+}
+
+#container {
+  background-color: #FFFFFF;
+
+  height: calc(100% - 60px);
+  width: 100%;
+  border: 1px dashed black;
 }
