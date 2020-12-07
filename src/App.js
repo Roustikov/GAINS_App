@@ -1,14 +1,14 @@
 import './App.css';
 import TaskForm from './TaskForm.js'
 import TaskList from './TaskList.js'
-import ReactGantt from 'gantt-for-react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
 import Board from '@lourenci/react-kanban'
 import '@lourenci/react-kanban/dist/styles.css'
 
-import MindMapContainer from './mindMap.tsx'
+import MindMapContainer from './MindMap/mindMap'
+import GanttDiagram from './Gantt/ganttDiagram';
 
 var React = require('react');
 
@@ -110,9 +110,7 @@ class App extends React.Component {
             </TabPanel>
 
             <TabPanel>
-                <div>
-                    <ReactGantt tasks={this.getTasks()} viewMode={this.state.viewMode}></ReactGantt>
-                </div>
+                    <GanttDiagram></GanttDiagram>
             </TabPanel>
 
             </Tabs>
