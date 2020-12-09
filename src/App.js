@@ -98,7 +98,9 @@ class App extends React.Component {
             </TabPanel>
 
             <TabPanel>
-                <GanttDiagram tasks={this.dataProvider.getTasks()} users={this.dataProvider.getUsers()}></GanttDiagram>
+                <div className="gantt-container">
+                    <GanttDiagram tasks={this.dataProvider.getTasks()} users={this.dataProvider.getUsers()}></GanttDiagram>
+                </div>
             </TabPanel>
 
             </Tabs>

@@ -41,15 +41,15 @@ class GanttDiagram extends React.Component {
         };
     }
     render() {
-        return (<GanttComponent 
-            className="gantt-container" 
-            height="100%"
+        return (<GanttComponent
             dataSource={this.props.tasks}
             taskFields={this.taskFields} 
             editSettings={this.editSettings}
             resourceFields={this.resourceFields}
             resources={this.props.users}
-            allowSelection={true}>
+            allowSelection={true}
+            rowHeight={40}
+            taskbarHeight={20}>
             <Inject services={[Edit, Selection]}/>
             </GanttComponent>);
     }

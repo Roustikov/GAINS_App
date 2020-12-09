@@ -12,11 +12,28 @@
 @import '../../node_modules/@syncfusion/ej2-richtexteditor/styles/material.css';
 @import '../../node_modules/@syncfusion/ej2-treegrid/styles/material.css';
 
-
-.gantt-container { 
-    position: absolute; 
+.gantt-container {
+    height: 90vh;
+    margin:10px;
+    overflow: scroll;
 }
 
-.e-gantt-splitter.e-control.e-splitter.e-lib.e-splitter-horizontal {
-    width: auto !important;
+.e-right-connectorpoint-outer-div {
+    margin-top: 4px !important;
+}
+
+.e-left-connectorpoint-outer-div {
+    margin-top: 4px !important;
+    left: -22px !important;
+}
+
+.e-headercontent {
+    height: 62px;
+}
+
+body, html, .App {
+    height: 100%;
+}
+body {
+    min-height: 100%;
 }
