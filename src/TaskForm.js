@@ -25,7 +25,7 @@ class TaskForm extends React.Component {
         id: "Task"+nextId,
         name: "Test"+nextId,
         description: "Test",
-        assignee: "User",
+        assignee: 0,
         progress: nextId,
         start: "2020-11-23",
         end: "2021-11-23",
@@ -69,12 +69,13 @@ class TaskForm extends React.Component {
 
         <div className="input-group">
         <label>Assignee:</label>
-          <input
+          <select name="assignee"
             className="input-value"
-            name="assignee"
             type="text"
             value={this.state.assignee}
-            onChange={this.handleInputChange} />
+            onChange={this.handleInputChange}>
+            {this.props.users.map(user=>{return <option value={user.id} key={user.id}>{user.fullName}</option>})}
+          </select>
         </div>
 
         <div className="input-group">
