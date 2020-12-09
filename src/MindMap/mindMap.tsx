@@ -52,7 +52,7 @@ class MindMapContainer extends React.Component {
                 id: 'id',
                 parentId: 'parentId',
                 dataManager: this.state.items,
-                root: "1"
+                root: "0"
             }
         }
         //Sets the default properties for nodes and connectors

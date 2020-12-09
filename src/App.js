@@ -7,6 +7,8 @@ import 'react-tabs/style/react-tabs.css';
 import Board from '@lourenci/react-kanban'
 import '@lourenci/react-kanban/dist/styles.css'
 
+import MindMapContainer from './MindMap/MindMap'
+import GanttDiagram from './Gantt/GanttDiagram';
 import DataProvider from './DataProvider.tsx'
 
 var React = require('react');
@@ -58,24 +60,6 @@ class App extends React.Component {
         columns[0].cards = this.state.tasks.filter(item => {item.title=item.name; return item.state==="ToDo";});
         columns[1].cards = this.state.tasks.filter(item => {item.title=item.name; return item.state==="Done";});
         return {columns: columns};
-    }
-
-    getMindMap(){
-        let mapData = [{
-            id: "1",
-            Label: 'Project'
-        }];
-
-        this.state.tasks.map(task=>{
-            mapData.push({
-                id: task.id,
-                Label: task.name,
-                parentId: task.dependencies ? task.dependencies.split(',') : "1"
-            })
-        });
-        
-
-        return mapData;
     }
 
     getTasks(){
