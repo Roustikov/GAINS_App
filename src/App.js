@@ -7,14 +7,14 @@ import 'react-tabs/style/react-tabs.css';
 import Board from '@lourenci/react-kanban'
 import '@lourenci/react-kanban/dist/styles.css'
 
-import MindMapContainer from './MindMap/mindMap'
-import GanttDiagram from './Gantt/ganttDiagram';
+import DataProvider from './DataProvider.tsx'
 
 var React = require('react');
 
 class App extends React.Component {
     constructor(props) {
         super(props);
+        this.dataProvider = new DataProvider();
         this.state = {
             viewMode: "Month",
             tasks: [
@@ -37,6 +37,7 @@ class App extends React.Component {
     }
 
     addTask = (taskData) => {
+        this.dataProvider.addTask(taskData);
         this.state.tasks.push(taskData);
         this.setState(this.state);
     }
@@ -94,7 +95,10 @@ class App extends React.Component {
             
             <TabPanel>
             <div className="wrapper">
-                <TaskForm addTaskCallback={this.addTask} tasks={this.state.tasks}></TaskForm>
+                <TaskForm 
+                addTaskCallback={this.addTask} 
+                tasks={this.state.tasks} 
+                users={this.dataProvider.getUsers()}></TaskForm>
                 <TaskList tasks={this.state.tasks}></TaskList>
             </div>
             </TabPanel>
@@ -106,11 +110,11 @@ class App extends React.Component {
             </TabPanel>
 
             <TabPanel>
-                <MindMapContainer mindMap={this.getMindMap()}/>
+                <MindMapContainer mindMap={this.dataProvider.getMindMap()}/>
             </TabPanel>
 
             <TabPanel>
-                    <GanttDiagram></GanttDiagram>
+                <GanttDiagram tasks={this.dataProvider.getTasks()} users={this.dataProvider.getUsers()}></GanttDiagram>
             </TabPanel>
 
             </Tabs>
