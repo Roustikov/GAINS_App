@@ -4,7 +4,7 @@ class TaskForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.getNewForm();
-
+    this.state.tasks = props.dataProvider.getSimpleTaskList();
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
@@ -19,34 +19,46 @@ class TaskForm extends React.Component {
   }
 
   getNewForm(){
-    let nextId = Math.max(...this.props.tasks.map(task=>task.id.replace('Task','')))+1;
+    let taskIds = this.props.dataProvider.getTaskIdList();
+    let nextId = Math.max(...taskIds)+1;
     return (
     {
-        id: "Task"+nextId,
-        name: "Test"+nextId,
-        description: "Test",
-        assignee: 0,
-        progress: nextId,
-        start: "2020-11-23",
-        end: "2021-11-23",
-        state: "ToDo",
-        dependencies: ''
+      id: nextId,
+      name: "New Task",
+      start: new Date(),
+      end: new Date(),
+      description: "New Description",
+      assignee: 0,
+      progress: 0,
+      dependency: 0,
+      state: "ToDo"
     })
   }
 
   addTask = (event) => {
-    this.props.addTaskCallback(this.state);
+
+    let newTask = {
+      TaskName: this.state.name,
+      id: this.state.id,
+      StartDate: new Date(this.state.start), 
+      EndDate: new Date(this.state.end),
+      Duration: this.state.duration,
+      Progress: this.state.progress,
+      ParentId: parseInt(this.state.dependency),
+      State: this.state.state
+    };
+    
+    this.props.addTaskCallback(newTask);
     // generate new id 
     this.setState(this.getNewForm()); 
     event.preventDefault();
+    this.props.close();
   }
 
   render() {
     return (
+      <div className="wrapper">
       <form onSubmit = {this.addTask} className="container">
-        <div>
-      <label>Create new task</label>
-
         <div className="input-group">
         <label>Title:</label>
         <input
@@ -74,7 +86,7 @@ class TaskForm extends React.Component {
             type="text"
             value={this.state.assignee}
             onChange={this.handleInputChange}>
-            {this.props.users.map(user=>{return <option value={user.id} key={user.id}>{user.fullName}</option>})}
+            {this.props.dataProvider.getUsers().map(user=>{return <option value={user.id} key={user.id}>{user.fullName}</option>})}
           </select>
         </div>
 
@@ -110,20 +122,18 @@ class TaskForm extends React.Component {
 
         <div className="input-group">
         <label>Dependency:</label>
-          <select name="dependencies"
+          <select name="dependency"
             className="input-value"
             type="text"
             value={this.state.dependencies}
             onChange={this.handleInputChange}>
-              <option value=""> </option>
-            {this.props.tasks.map(task=>{return <option value={task.id} key={task.id}>{task.id}</option>})}
+            {this.props.dataProvider.getSimpleTaskList().map(task=>{return <option value={task.id} key={task.id}>{task.name}</option>})}
           </select>
         </div>
 
         <input className="add-task-button" type="submit" value = "Add task"/>
-        </div>
       </form>
-      
+      </div>
     );
   }
 }
