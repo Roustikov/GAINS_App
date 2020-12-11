@@ -2,39 +2,41 @@ import { Component } from 'react'
 
 export default class DataProvider extends Component {
     users: { id: number; fullName: string; }[];
-    tasks: { TaskID: number; TaskName: string; StartDate: Date; EndDate: Date; subtasks: ({ TaskID: number; TaskName: string; StartDate: Date; Duration: number; Progress: number; EndDate?: undefined; subtasks?: undefined; } | { })[]; }[];
+    tasks: { id: number; State: "ToDo", TaskName: string; StartDate: Date; EndDate: Date; subtasks: ({ id: number; State: "ToDo", TaskName: string; StartDate: Date; Duration: number; Progress: number; EndDate?: undefined; subtasks?: undefined; } | { })[]; }[];
     
     constructor(props: {}) {
         super(props);
         this.tasks = [{
-            TaskID: 1,
+            id: 1,
+            State: "ToDo", 
             TaskName: 'Project Initiation',
             StartDate: new Date('04/02/2019'),
             EndDate: new Date('04/21/2019'),
             subtasks: [
-                { TaskID: 2, TaskName: 'Identify Site location', StartDate: new Date('04/02/2019'), Duration: 4, Progress: 50 },
-                { TaskID: 3, TaskName: 'Perform Soil test', StartDate: new Date('04/02/2019'), Duration: 4, Progress: 50 },
-                { TaskID: 4, TaskName: 'Soil test approval', StartDate: new Date('04/02/2019'), Duration: 4, Progress: 50 },
+                { id: 2, State: "Done", TaskName: 'Identify Site location', StartDate: new Date('04/02/2019'), Duration: 4, Progress: 50 },
+                { id: 3, State: "Done", TaskName: 'Perform Soil test', StartDate: new Date('04/02/2019'), Duration: 4, Progress: 50 },
+                { id: 4, State: "ToDo", TaskName: 'Soil test approval', StartDate: new Date('04/02/2019'), Duration: 4, Progress: 50 },
             ]
         },
         {
-            TaskID: 5,
+            id: 5,
+            State: "ToDo", 
             TaskName: 'Project Estimation',
             StartDate: new Date('04/02/2019'),
             EndDate: new Date('04/21/2019'),
             subtasks: [
-                { TaskID: 6, TaskName: 'Develop floor plan for estimation', StartDate: new Date('04/04/2019'), Duration: 3, Progress: 50 },
-                { TaskID: 7, TaskName: 'List materials', StartDate: new Date('04/04/2019'), Duration: 3, Progress: 50 },
-                { TaskID: 8, TaskName: 'Estimation approval', StartDate: new Date('04/06/2019'), EndDate: new Date('04/07/2019'), subtasks: [
-                    { TaskID: 9, TaskName: 'Develop floor plan for estimation', StartDate: new Date('04/06/2019'), Duration: 3, Progress: 50, Predecessor: '8FS' },
-                    { TaskID: 10, TaskName: 'List materials', StartDate: new Date('04/06/2019'), Duration: 3, Progress: 50, Predecessor: '9FS' },
-                    { TaskID: 11, TaskName: 'Estimation approval', StartDate: new Date('04/06/2019'), Duration: 3, Predecessor: '10FS', subtasks: [
-                        { TaskID: 12, TaskName: 'Develop floor plan for estimation', StartDate: new Date('04/06/2019'), Duration: 3, Progress: 50, Predecessor: '11FS' },
-                        { TaskID: 13, TaskName: 'List materials', StartDate: new Date('04/06/2019'), Duration: 3, Progress: 50, Predecessor: '12FS' },
-                        { TaskID: 14, TaskName: 'Estimation approval', StartDate: new Date('04/08/2019'), Duration: 30, Progress: 50, Predecessor: '13FS', subtasks: [
-                            { TaskID: 15, TaskName: 'Develop floor plan for estimation', StartDate: new Date('04/06/2019'), Duration: 3, Progress: 50, Predecessor: '11FS' },
-                            { TaskID: 16, TaskName: 'List materials', StartDate: new Date('04/06/2019'), Duration: 3, Progress: 50, Predecessor: '12FS' },
-                            { TaskID: 17, TaskName: 'Estimation approval', StartDate: new Date('04/08/2019'), Duration: 30, Progress: 50, Predecessor: '13FS' }
+                { id: 6, State: "ToDo", TaskName: 'Develop floor plan for estimation1', StartDate: new Date('04/04/2019'), Duration: 3, Progress: 50 },
+                { id: 7, State: "ToDo", TaskName: 'List materials1', StartDate: new Date('04/04/2019'), Duration: 3, Progress: 50 },
+                { id: 8, State: "ToDo", TaskName: 'Estimation approval1', StartDate: new Date('04/06/2019'), EndDate: new Date('04/07/2019'), subtasks: [
+                    { id: 9, State: "ToDo", TaskName: 'Develop floor plan for estimation2', StartDate: new Date('04/06/2019'), Duration: 3, Progress: 50, Predecessor: '8FS' },
+                    { id: 10, State: "ToDo", TaskName: 'List materials2', StartDate: new Date('04/06/2019'), Duration: 3, Progress: 50, Predecessor: '9FS' },
+                    { id: 11, State: "ToDo", TaskName: 'Estimation approval2', StartDate: new Date('04/06/2019'), Duration: 3, Predecessor: '10FS', subtasks: [
+                        { id: 12, State: "ToDo", TaskName: 'Develop floor plan for estimation3', StartDate: new Date('04/06/2019'), Duration: 3, Progress: 50, Predecessor: '11FS' },
+                        { id: 13, State: "ToDo", TaskName: 'List materials3', StartDate: new Date('04/06/2019'), Duration: 3, Progress: 50, Predecessor: '12FS' },
+                        { id: 14, State: "ToDo", TaskName: 'Estimation approval3', StartDate: new Date('04/08/2019'), Duration: 30, Progress: 50, Predecessor: '13FS', subtasks: [
+                            { id: 15, State: "ToDo", TaskName: 'Develop floor plan for estimation4', StartDate: new Date('04/06/2019'), Duration: 3, Progress: 50, Predecessor: '11FS' },
+                            { id: 16, State: "ToDo", TaskName: 'List materials4', StartDate: new Date('04/06/2019'), Duration: 3, Progress: 50, Predecessor: '12FS' },
+                            { id: 17, State: "ToDo", TaskName: 'Estimation approval4', StartDate: new Date('04/08/2019'), Duration: 30, Progress: 50, Predecessor: '13FS' }
                         ] }
                     ] }
                 ]  }
@@ -67,8 +69,8 @@ export default class DataProvider extends Component {
     }
 
     addTask(task: any){
-        if(task.parentId != 0) {
-            let parent = this.tasks.find(t=>t.TaskID == task.parentId);
+        if(task.ParentId !== 0) {
+            let parent = this.getTaskWithId(task.ParentId);
             if(parent) {
                 if(Array.isArray(parent.subtasks)) {
                     parent.subtasks.push(task);
@@ -81,40 +83,13 @@ export default class DataProvider extends Component {
         }
     }
 
-    parseTaskList(list: any[]) {
-        let tasks: any = [];
-        list.map((task)=>{
-            tasks = tasks.concat(this.parseTask(task, 0));
-        });
-        return tasks;
-    }
-
-    parseTask(task: any, parent: number){
-        let tasksArray:any[] = [
-            {
-                id: task.TaskID,
-                Label: task.TaskName,
-                parentId: parent
-            }
-        ];
-
-        if(Array.isArray(task.subtasks)) {
-            task.subtasks.map((childTask: any)=>{
-                let childTasks = this.parseTask(childTask, task.TaskID);
-                tasksArray = tasksArray.concat(childTasks);
-            });
-        }
-
-        return tasksArray;
-    }
-
     getMindMap(){
         let mapData = [{
             id: 0,
-            Label: 'Project'
+            State: "ToDo", TaskName: 'Project'
         }];
 
-        mapData = mapData.concat(this.parseTaskList(this.getTasks()));
+        mapData = mapData.concat(this.getFlatTasks());
         
         return mapData;
     }
@@ -125,5 +100,39 @@ export default class DataProvider extends Component {
 
     getTasks(){
         return this.tasks;
+    }
+
+    getFlatTasks() {
+        let flatTasks: any = [];
+        this.tasks.map((task)=>{
+            return flatTasks = flatTasks.concat(this._parseTask(task, 0));
+        })
+
+        return flatTasks;
+    }
+
+    _parseTask(task:any, ParentId: number) {
+        let result: any = [task];
+        task.ParentId = ParentId;
+        if(Array.isArray(task.subtasks)) {
+            task.subtasks.map((child:any)=>{
+                return result = result.concat(this._parseTask(child, task.id))
+            })
+        }
+        return result;
+    }
+
+    getTaskWithId(id: number){
+        return this.getFlatTasks().find((x:any)=>{return x.id === id});
+    }
+
+    getTaskIdList(){
+        return this.getFlatTasks().map((t:any)=>{return t.id});
+    }
+
+    getSimpleTaskList(){
+        let tasks = this.getFlatTasks();
+        let result = tasks.map((t:any)=>{return {id:t.id, name:t.TaskName}});
+        return [{id: 0, name: "Project"}, ...result];
     }
 }

@@ -17,19 +17,14 @@ import {
     ConnectorShape,
     Decorator
 } from "@syncfusion/ej2-react-diagrams";
+
 import {
-    DataManager,
-    Query
+    DataManager
 } from '@syncfusion/ej2-data';
 
 //Initializes data source
 class MindMapContainer extends React.Component {
-  state: {items:DataManager};
-  constructor(props: any) {
-    super(props);
-    this.state = {items:new DataManager(props.mindMap as JSON[])};
-}
-
+    props: any;
   render() {
       return(
         <DiagramComponent id = "diagram"
@@ -50,8 +45,8 @@ class MindMapContainer extends React.Component {
         dataSourceSettings = {
             {
                 id: 'id',
-                parentId: 'parentId',
-                dataManager: this.state.items,
+                parentId: 'ParentId',
+                dataSource: new DataManager(this.props.mindMap),
                 root: "0"
             }
         }
@@ -61,8 +56,8 @@ class MindMapContainer extends React.Component {
                 obj.shape = {
                     type: 'Text',
                     content: (obj.data as {
-                        Label: 'string'
-                    }).Label,
+                        TaskName: 'string'
+                    }).TaskName,
                 };
                 obj.style = {
                     fill: '#6BA5D7',
