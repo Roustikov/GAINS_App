@@ -1,4 +1,6 @@
-import { DataBinding } from "@syncfusion/ej2-react-diagrams";
+import {
+    DataManager
+} from '@syncfusion/ej2-data';
 
 import { 
     Inject, 
@@ -6,7 +8,8 @@ import {
     Edit,
     EditSettingsModel,
     GanttComponent,
-    TaskFieldsModel
+    TaskFieldsModel,
+    RowDD
 } from '@syncfusion/ej2-react-gantt';
 
 import * as React from 'react';
@@ -19,13 +22,11 @@ class GanttDiagram extends React.Component {
     resourceFields: { id: string; name: string; };
     props: any;
     state: any;
+    ganttInstance: any;
+    dataSource: DataManager;
+
     constructor(props: {tasks: any; users: any;}) {
         super(props);
-        this.state = {
-            tasks: props.tasks,
-            users: props.users
-        };
-
         this.taskFields = {
             id: 'id',
             name: 'TaskName',
@@ -46,21 +47,29 @@ class GanttDiagram extends React.Component {
         this.editSettings = {
             allowTaskbarEditing: true,
             allowEditing: true,
-            mode: 'Auto',
+            mode: 'Auto'
         };
+        this.dataSource = new DataManager(props.tasks);
     }
+    
+componentDidUpdate(props:any) {
+    let gantt:GanttComponent = this.ganttInstance;
+    gantt.refresh();
+}
 
     render() {
         return (<GanttComponent
-            dataSource={this.state.tasks}
+            ref={gantt => this.ganttInstance = gantt}
+            dataSource={this.props.tasks}
             taskFields={this.taskFields} 
             editSettings={this.editSettings}
             resourceFields={this.resourceFields}
-            resources={this.state.users}
+            resources={this.props.users}
+            allowRowDragAndDrop={true}
             allowSelection={true}
             rowHeight={40}
             taskbarHeight={20}>
-            <Inject services={[Edit, Selection]}/>
+            <Inject services={[Edit, Selection, RowDD]}/>
             </GanttComponent>);
     }
 }
