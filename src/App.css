@@ -58,3 +58,11 @@
   width: 100%;
   border: 1px dashed black;
 }
+
+body, html, .App, .react-tabs__tab-panel, .react-tabs {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+}

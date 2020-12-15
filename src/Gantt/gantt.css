@@ -31,9 +31,3 @@
     height: 62px;
 }
 
-body, html, .App {
-    height: 100%;
-}
-body {
-    min-height: 100%;
-}
