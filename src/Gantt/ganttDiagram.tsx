@@ -8,8 +8,7 @@ import {
     Edit,
     EditSettingsModel,
     GanttComponent,
-    TaskFieldsModel,
-    RowDD
+    TaskFieldsModel
 } from '@syncfusion/ej2-react-gantt';
 
 import * as React from 'react';
@@ -65,11 +64,10 @@ componentDidUpdate(props:any) {
             editSettings={this.editSettings}
             resourceFields={this.resourceFields}
             resources={this.props.users}
-            allowRowDragAndDrop={true}
             allowSelection={true}
             rowHeight={40}
             taskbarHeight={20}>
-            <Inject services={[Edit, Selection, RowDD]}/>
+            <Inject services={[Edit, Selection]}/>
             </GanttComponent>);
     }
 }
