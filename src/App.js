@@ -3,22 +3,28 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
 import MindMapContainer from './MindMap/MindMap'
+import TableView from './MindMap/TableView.jsx'
+
 import GanttDiagram from './Gantt/GanttDiagram';
 import KanbanBoard from './Kanban/KanbanBoard';
-import DataProvider from './DataProvider.tsx'
 import EditPopup from './Popup/EditPopup.tsx'
+import DataProvider from './DataProvider.tsx'
 
 var React = require('react');
 
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.dataProvider = new DataProvider();
+        this.dataProvider = new DataProvider(this.refresh.bind(this));
         this.state = {
             tasks: this.dataProvider.getTasks(),
             users: this.dataProvider.getUsers(),
             mindMap: this.dataProvider.getMindMap()
         };
+    }
+
+    refresh(dataProviderTasks) {
+        // this.setState({tasks:dataProviderTasks})
     }
 
     addTask = (taskData) => {
@@ -39,7 +45,10 @@ class App extends React.Component {
             </TabList>
 
             <TabPanel>
-                <MindMapContainer mindMap={this.state.mindMap}/>
+                <div className="table-container">
+                    <TableView tasks={this.dataProvider.mindMap}></TableView>
+                    <MindMapContainer dataProvider={this.dataProvider}/>
+                </div>
             </TabPanel>
 
             <TabPanel>

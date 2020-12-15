@@ -15,7 +15,8 @@ import {
     MindMap,
     NodeConstraints,
     ConnectorShape,
-    Decorator
+    Decorator,
+    ITextEditEventArgs
 } from "@syncfusion/ej2-react-diagrams";
 
 import {
@@ -25,6 +26,15 @@ import {
 //Initializes data source
 class MindMapContainer extends React.Component {
     props: any;
+    state:any;
+    
+    constructor(props:any) {
+        super(props);
+        
+        this.state = {
+            mindMap: props.dataProvider.getMindMap()
+        };
+    }
   render() {
       return(
         <DiagramComponent id = "diagram"
@@ -46,7 +56,7 @@ class MindMapContainer extends React.Component {
             {
                 id: 'id',
                 parentId: 'ParentId',
-                dataSource: new DataManager(this.props.mindMap),
+                dataSource: new DataManager(this.state.mindMap),
                 root: "0"
             }
         }
@@ -90,6 +100,12 @@ class MindMapContainer extends React.Component {
                 return connector;
             }
         }
+        textEdit={(event: any) => {
+            if(event.name === "textEdit") {
+                let task = event.element.data;
+                this.props.dataProvider.updateTask(task.id, event.newValue);
+            }
+        }}
         ><Inject services = {[DataBinding, MindMap]}/>
         </DiagramComponent>
       )
