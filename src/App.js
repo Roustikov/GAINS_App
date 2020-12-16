@@ -10,6 +10,8 @@ import KanbanBoard from './Kanban/KanbanBoard';
 import EditPopup from './Popup/EditPopup.tsx'
 import DataProvider from './DataProvider.tsx'
 
+import { SplitterComponent, PanesDirective, PaneDirective } from '@syncfusion/ej2-react-layouts';
+
 var React = require('react');
 
 class App extends React.Component {
@@ -32,6 +34,10 @@ class App extends React.Component {
         this.setState({tasks: this.dataProvider.getTasks(), mindMap: this.dataProvider.getMindMap()});
     }
 
+    actionComplete = (args) => {
+        this.setState({tasks:this.dataProvider.tasks})
+    }
+
     render() {
         return (
             <div className="App">
@@ -45,9 +51,13 @@ class App extends React.Component {
             </TabList>
 
             <TabPanel>
-                <div className="table-container">
-                    <TableView tasks={this.dataProvider.mindMap}></TableView>
-                    <MindMapContainer dataProvider={this.dataProvider}/>
+                <div className="mindmap-container">
+                    <SplitterComponent height="100%" width="100%" separatorSize={4}>
+                        <PanesDirective>
+                            <PaneDirective size="25%" min="0px" content={()=>{return(<TableView tasks={this.state.tasks} actionComplete={this.actionComplete.bind(this)}></TableView>)}}/>
+                            <PaneDirective size="75%" min="60px" content={()=>{return(<MindMapContainer tasks={this.state.mindMap} actionComplete={this.actionComplete.bind(this)}/>)}}/>
+                        </PanesDirective>
+                    </SplitterComponent>
                 </div>
             </TabPanel>
 

@@ -18,16 +18,16 @@
     overflow: scroll;
 }
 
-.e-right-connectorpoint-outer-div {
+.gantt-container .e-right-connectorpoint-outer-div {
     margin-top: 4px !important;
 }
 
-.e-left-connectorpoint-outer-div {
+.gantt-container .e-left-connectorpoint-outer-div {
     margin-top: 4px !important;
     left: -22px !important;
 }
 
-.e-headercontent {
+.gantt-container .e-headercontent {
     height: 62px;
 }
 

@@ -16,7 +16,8 @@ import {
     NodeConstraints,
     ConnectorShape,
     Decorator,
-    ITextEditEventArgs
+    ITextEditEventArgs,
+    ScrollSettingsModel
 } from "@syncfusion/ej2-react-diagrams";
 
 import {
@@ -30,20 +31,13 @@ class MindMapContainer extends React.Component {
     
     constructor(props:any) {
         super(props);
-        
-        this.state = {
-            mindMap: props.dataProvider.getMindMap()
-        };
     }
   render() {
       return(
         <DiagramComponent id = "diagram"
-        width = {
-            '100%'
-        }
-        height = {
-            '550px'
-        }
+        width = '100%'
+        height = '100%'
+        scrollSettings = {{scrollLimit:"Infinity"}}
         //Uses layout to auto-arrange nodes on the diagram page
         layout = {
             {
@@ -56,7 +50,7 @@ class MindMapContainer extends React.Component {
             {
                 id: 'id',
                 parentId: 'ParentId',
-                dataSource: new DataManager(this.state.mindMap),
+                dataSource: new DataManager(this.props.tasks),
                 root: "0"
             }
         }
@@ -103,7 +97,8 @@ class MindMapContainer extends React.Component {
         textEdit={(event: any) => {
             if(event.name === "textEdit") {
                 let task = event.element.data;
-                this.props.dataProvider.updateTask(task.id, event.newValue);
+                task.TaskName = event.newValue;
+                this.props.actionComplete(event);
             }
         }}
         ><Inject services = {[DataBinding, MindMap]}/>
