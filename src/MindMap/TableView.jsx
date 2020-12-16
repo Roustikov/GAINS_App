@@ -1,5 +1,4 @@
 import { TreeGridComponent, ColumnsDirective, ColumnDirective, Edit, Inject } from '@syncfusion/ej2-react-treegrid'
-import './table.css'
 
 import { Component } from 'react'
 
