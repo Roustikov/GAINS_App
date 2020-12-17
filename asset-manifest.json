@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/GAINS_App/static/css/main.01964e2e.chunk.css",
-    "main.js": "/GAINS_App/static/js/main.41b03b57.chunk.js",
-    "main.js.map": "/GAINS_App/static/js/main.41b03b57.chunk.js.map",
+    "main.js": "/GAINS_App/static/js/main.cf635a13.chunk.js",
+    "main.js.map": "/GAINS_App/static/js/main.cf635a13.chunk.js.map",
     "runtime-main.js": "/GAINS_App/static/js/runtime-main.1e233b6f.js",
     "runtime-main.js.map": "/GAINS_App/static/js/runtime-main.1e233b6f.js.map",
     "static/css/2.a6b545b7.chunk.css": "/GAINS_App/static/css/2.a6b545b7.chunk.css",
@@ -18,6 +18,6 @@
     "static/css/2.a6b545b7.chunk.css",
     "static/js/2.21544417.chunk.js",
     "static/css/main.01964e2e.chunk.css",
-    "static/js/main.41b03b57.chunk.js"
+    "static/js/main.cf635a13.chunk.js"
   ]
 }
