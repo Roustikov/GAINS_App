@@ -50,7 +50,16 @@ class App extends React.Component {
             task.Progress = event.data.Progress;
             task.Assignee = event.data.Assignee;
             task.TaskName = event.data.TaskName;   
-            task.State = event.data.State;   
+            task.State = event.data.State;
+
+            const ONE_DAY = 1000 * 60 * 60 * 24;
+            if(event.column.field === 'Duration') {
+                let d = event.data.StartDate;
+                task.EndDate = new Date(d.getFullYear(), d.getMonth(), d.getDate()+event.data.Duration);
+            } else {
+                const differenceMs = Math.abs(event.data.EndDate.getTime() - event.data.StartDate.getTime());
+                task.Duration = Math.round(differenceMs / ONE_DAY);
+            }
         }
         this.setState({tasks:this.dataProvider.tasks})
     }
