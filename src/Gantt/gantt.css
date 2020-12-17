@@ -13,9 +13,9 @@
 @import '../../node_modules/@syncfusion/ej2-treegrid/styles/material.css';
 
 .gantt-container {
-    height: 90vh;
-    margin:10px;
-    overflow: scroll;
+    height: calc(100% - 58px);
+    margin: 10px;
+    overflow: auto;
 }
 
 .gantt-container .e-right-connectorpoint-outer-div {
@@ -29,5 +29,9 @@
 
 .gantt-container .e-headercontent {
     height: 62px;
+}
+
+.gantt-container .e-content {
+    height: calc(100vh - 124px) !important;
 }
 
