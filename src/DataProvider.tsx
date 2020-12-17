@@ -265,4 +265,8 @@ export default class DataProvider {
     getTaskIdList(){
         return this.tasks.map((t:any)=>{return t.id});
     }
+
+    getSimpleTaskList(){
+        return this.tasks.map((t:any)=>{return {id:t.id, name:t.TaskName}});
+    }
 }

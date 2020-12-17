@@ -30,7 +30,7 @@ class App extends React.Component {
 
     addTask = (taskData) => {
         this.dataProvider.addTask(taskData);
-        this.setState({tasks: this.dataProvider.getTasks(), mindMap: this.dataProvider.getMindMap()});
+        this.setState({tasks: this.dataProvider.tasks, mindMap: this.dataProvider.tasks});
     }
 
     mindMapActionComplete = (event) => {

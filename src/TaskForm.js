@@ -86,7 +86,7 @@ class TaskForm extends React.Component {
             type="text"
             value={this.state.assignee}
             onChange={this.handleInputChange}>
-            {this.props.dataProvider.getUsers().map(user=>{return <option value={user.id} key={user.id}>{user.fullName}</option>})}
+            {this.props.dataProvider.users.map(user=>{return <option value={user.userId} key={user.userId}>{user.fullName}</option>})}
           </select>
         </div>
 
