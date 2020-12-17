@@ -19,9 +19,8 @@ class App extends React.Component {
         super(props);
         this.dataProvider = new DataProvider(this.refresh.bind(this));
         this.state = {
-            tasks: this.dataProvider.getTasks(),
-            users: this.dataProvider.getUsers(),
-            mindMap: this.dataProvider.getMindMap()
+            tasks: this.dataProvider.tasks,
+            users: this.dataProvider.users,
         };
     }
 
@@ -34,7 +33,25 @@ class App extends React.Component {
         this.setState({tasks: this.dataProvider.getTasks(), mindMap: this.dataProvider.getMindMap()});
     }
 
-    actionComplete = (args) => {
+    mindMapActionComplete = (event) => {
+        if(event.name === "textEdit") {
+            let task = event.element.data;
+            task.TaskName = event.newValue;   
+        }
+        this.setState({mindMap:this.dataProvider.tasks})
+    }
+
+    tableActionComplete = (event) => {
+        if(event.name === "actionComplete") {
+            let task = this.dataProvider.tasks.find(task=>task.id === event.data.id);
+            task.StartDate = event.data.StartDate;
+            task.EndDate = event.data.EndDate;
+            task.Duration = event.data.Duration;
+            task.Progress = event.data.Progress;
+            task.Assignee = event.data.Assignee;
+            task.TaskName = event.data.TaskName;   
+            task.State = event.data.State;   
+        }
         this.setState({tasks:this.dataProvider.tasks})
     }
 
@@ -52,10 +69,10 @@ class App extends React.Component {
 
             <TabPanel>
                 <div className="mindmap-container">
-                    <SplitterComponent height="100%" width="100%" separatorSize={4}>
+                    <SplitterComponent height="100%" width="100%" separatorSize={2}>
                         <PanesDirective>
-                            <PaneDirective size="25%" min="0px" content={()=>{return(<TableView tasks={this.state.tasks} actionComplete={this.actionComplete.bind(this)}></TableView>)}}/>
-                            <PaneDirective size="75%" min="60px" content={()=>{return(<MindMapContainer tasks={this.state.mindMap} actionComplete={this.actionComplete.bind(this)}/>)}}/>
+                            <PaneDirective size="25%" min="0px" content={()=>{return(<TableView tasks={this.state.tasks} actionComplete={this.tableActionComplete.bind(this)}></TableView>)}}/>
+                            <PaneDirective size="75%" min="60px" content={()=>{return(<MindMapContainer tasks={this.state.tasks} actionComplete={this.mindMapActionComplete.bind(this)}/>)}}/>
                         </PanesDirective>
                     </SplitterComponent>
                 </div>
@@ -69,7 +86,7 @@ class App extends React.Component {
 
             <TabPanel>
                 <div className="gantt-container">
-                    <KanbanBoard tasks={this.state.mindMap}></KanbanBoard>
+                    <KanbanBoard tasks={this.state.tasks}></KanbanBoard>
                 </div>
             </TabPanel>
 

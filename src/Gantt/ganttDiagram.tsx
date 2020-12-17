@@ -1,14 +1,11 @@
-import {
-    DataManager
-} from '@syncfusion/ej2-data';
-
 import { 
     Inject, 
     Selection, 
     Edit,
     EditSettingsModel,
     GanttComponent,
-    TaskFieldsModel
+    TaskFieldsModel,
+    ResourceFields
 } from '@syncfusion/ej2-react-gantt';
 
 import * as React from 'react';
@@ -22,7 +19,6 @@ class GanttDiagram extends React.Component {
     props: any;
     state: any;
     ganttInstance: any;
-    dataSource: DataManager;
 
     constructor(props: {tasks: any; users: any;}) {
         super(props);
@@ -30,14 +26,15 @@ class GanttDiagram extends React.Component {
             id: 'id',
             name: 'TaskName',
             startDate: 'StartDate',
+            endDate: 'EndDate',
             duration: 'Duration',
             progress: 'Progress',
-            child: 'subtasks',
+            parentID: 'ParentId',
             dependency: 'Predecessor',
-            resourceInfo: 'resources'
+            resourceInfo: 'Assignee'
         };
         this.labelSettings = {
-            rightLabel: 'assignee'
+            rightLabel: 'Assignee'
         };
         this.resourceFields = {
             id: 'userId',
@@ -48,7 +45,6 @@ class GanttDiagram extends React.Component {
             allowEditing: true,
             mode: 'Auto'
         };
-        this.dataSource = new DataManager(props.tasks);
     }
     
 componentDidUpdate(props:any) {

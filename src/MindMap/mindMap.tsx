@@ -95,11 +95,7 @@ class MindMapContainer extends React.Component {
             }
         }
         textEdit={(event: any) => {
-            if(event.name === "textEdit") {
-                let task = event.element.data;
-                task.TaskName = event.newValue;
-                this.props.actionComplete(event);
-            }
+            this.props.actionComplete(event);
         }}
         ><Inject services = {[DataBinding, MindMap]}/>
         </DiagramComponent>

@@ -16,9 +16,10 @@ export default class TableView extends Component {
             editSettings={this.editSettings}
             actionComplete={this.props.actionComplete}
             treeColumnIndex={1} 
-            childMapping='subtasks'
+            parentIdMapping='ParentId'
+            idMapping='id'
             height='100%'
-            width="100%"
+            width='100%'
             style={{overflowX: "scroll"}}>
               <ColumnsDirective>
                 <ColumnDirective field='id' headerText='ID' textAlign='Right' width='30px'></ColumnDirective>

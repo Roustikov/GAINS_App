@@ -15,10 +15,9 @@ export default class KanbanBoard extends React.Component {
           <div className='control-wrapper'>
             <KanbanComponent id="kanban" 
             cssClass="kanban-overview" 
-            keyField="State" 
+            keyField="State"
             dataSource={this.props.tasks}
-            cardSettings={{ showHeader:false, headerField: "id", contentField: "TaskName"}} 
-            dialogSettings={{ fields: this.fields }}>
+            cardSettings={{ showHeader:false, headerField: "id", contentField: "TaskName"}} >
               <ColumnsDirective>
                 <ColumnDirective headerText="To Do" keyField="ToDo"/>
                 <ColumnDirective headerText="In Progress" keyField="InProgress"/>
