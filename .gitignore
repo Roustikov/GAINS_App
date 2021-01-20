@@ -5,3 +5,7 @@ __pycache__/
 .venv
 env/
 venv/
+db.sqlite3
+db - full.sqlite3
+frontend/static/frontend/main.js*
+frontend/static/frontend/main_prod.js*
