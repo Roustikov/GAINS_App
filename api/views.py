@@ -48,6 +48,12 @@ class TaskList(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
+    def list(self, request, pk):
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = self.get_queryset().filter(project_id=pk)
+        serializer = TaskSerializer(queryset, many=True)
+        return Response(serializer.data)
+
 class TaskDetail(APIView):
     def get_object(self, pk):
         try:
