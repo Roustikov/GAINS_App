@@ -2,7 +2,7 @@ import Popup from 'reactjs-popup';
 import './modal.css';
 
 import React, { Component } from 'react'
-import TaskForm from '../TaskForm'
+import TaskForm from './TaskForm'
 
 export default class EditPopup extends Component {
     render() {
