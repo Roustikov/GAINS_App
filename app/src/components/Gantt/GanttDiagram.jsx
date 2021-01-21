@@ -20,6 +20,7 @@ class GanttDiagram extends React.Component {
             progress: 'progress',
             parentID: 'parent_id',
             dependency: 'predecessor',
+            project_id: 'project_id'
         };
         
         this.labelSettings = {

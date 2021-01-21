@@ -25,7 +25,7 @@ SECRET_KEY = '4c9zkp!wnprt7mkr1mdw(*!z&1yy^@mbj3_y-fi3b2a=(xx-z7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "157.90.17.117"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "157.90.17.117"]
 
 
 # Application definition
@@ -128,3 +128,11 @@ STATIC_URL = '/static/'
 #         'rest_framework.renderers.JSONRenderer',
 #     )
 # }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
+
+LOGGING = { 'version': 1, 'disable_existing_loggers': False, 'handlers': { 'file': { 'level': 'DEBUG', 'class': 'logging.FileHandler', 'filename': '/tmp/debug.log', }, }, 'loggers': { 'django': { 'handlers': ['file'], 'level': 'DEBUG', 'propagate': True, }, }, }

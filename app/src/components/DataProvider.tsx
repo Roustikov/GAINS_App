@@ -11,17 +11,20 @@ export default class DataProvider {
         parent_id: number|undefined;
         progress: number; 
         predecessor?: string|undefined;
+        project_id: number;
     }[];
     refreshCallback: any;
     mindMap: any;
     loaded: boolean;
+    currentProject: number;
 
     constructor(refreshCallback:any) {
         this.refreshCallback = refreshCallback;
         this.tasks = [];
         this.loaded = false;
+        this.currentProject = 1;
 
-        fetch("api/tasks/")
+        fetch("api/tasks/1/")
         .then(response => {
             if (response.status > 400) {              
                     debugger;
@@ -62,6 +65,7 @@ export default class DataProvider {
     }
 
     addTask(task: any){
+        task.project_id = this.currentProject;
         this.postTask(task);
     }
 
@@ -161,5 +165,6 @@ export default class DataProvider {
         dest.progress = source.progress;
         dest.description = source.description;
         dest.duration = source.duration;
+        dest.project_id = source.project_id;
     }
 }
