@@ -40,14 +40,8 @@
     "webpack": "^5.11.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "dev": "webpack --progress",
-    "prod": "webpack --config ./webpack.config.prod.js",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "react-scripts build",
-    "deploy": "gh-pages -d build"
+    "dev": "webpack --progress --config ./webpack.config.js",
+    "prod": "webpack --config ./webpack.config.prod.js"
   },
   "eslintConfig": {
     "extends": [
