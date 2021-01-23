@@ -9,15 +9,31 @@ import GanttDiagram from './Gantt/GanttDiagram';
 import KanbanBoard from './Kanban/KanbanBoard';
 import EditPopup from './Popup/EditPopup'
 import DataProvider from './DataProvider'
+import ProjectSelector from './ProjectSelector/ProjectSelector'
+import PropTypes from "prop-types";
+import { withRouter } from "react-router";
 
 import { SplitterComponent, PanesDirective, PaneDirective } from '@syncfusion/ej2-react-layouts';
+
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+  } from "react-router-dom";
 
 var React = require('react');
 
 class App extends React.Component {
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+      };
+
     constructor(props) {
         super(props);
-        this.dataProvider = {};
+        this.dataProvider = new DataProvider(this.refresh.bind(this));
+
         this.state = {
             tasks: this.dataProvider.tasks,
             users: this.dataProvider.users,
@@ -26,15 +42,20 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        this.dataProvider = new DataProvider(this.refresh.bind(this));
+        let pathArr = this.props.location.pathname.split('/');
+        this.dataProvider.currentProject = +pathArr[pathArr.length-2];
+        this.dataProvider.fetchTasksForProject(this.dataProvider.currentProject, ()=>{
+            console.log(`Tasks for project ${this.dataProvider.currentProject} have been fetched successfully.`)
+        });
     }
 
-    refresh() {
+    refresh(tasks) {
         this.setState({tasks:this.dataProvider.tasks});
+        this.forceUpdate();
     }
 
     addTask = (taskData) => {
-        this.dataProvider.addTask(taskData);
+        this.dataProvider.addTask(taskData, this.refresh.bind(this));
     }
 
     editCallback(event) {
@@ -55,43 +76,52 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-            <Tabs>
-            <TabList>
-            <EditPopup addTaskCallback={this.addTask.bind(this)}
-                dataProvider={this.dataProvider}></EditPopup>
-            <Tab>Mind Map</Tab>
-            <Tab>Gantt Diagram</Tab>
-            <Tab>Kanban Board</Tab>
-            </TabList>
+                <Router>
+                    <Switch>
+                    <Route exact path="/">
+                        <ProjectSelector dataProvider={this.dataProvider}></ProjectSelector>
+                    </Route>
+                    <Route path="/tasks/:id/">
+                        <Tabs>
+                        <TabList>
+                        <EditPopup addTaskCallback={this.addTask.bind(this)}
+                            dataProvider={this.dataProvider}></EditPopup>
+                        <Tab>Mind Map</Tab>
+                        <Tab>Gantt Diagram</Tab>
+                        <Tab>Kanban Board</Tab>
+                        </TabList>
 
-            <TabPanel>
-                <div className="mindmap-container">
-                    <SplitterComponent height="100%" width="100%" separatorSize={2}>
-                        <PanesDirective>
-                            <PaneDirective size="25%" min="0px" content={()=>{return(<TableView tasks={this.state.tasks} editCallback={this.editCallback.bind(this)} deleteCallback={this.deleteCallback.bind(this)}></TableView>)}}/>
-                            <PaneDirective size="75%" min="60px" content={()=>{return(<MindMapContainer tasks={this.state.tasks} editCallback={this.editCallback.bind(this)} deleteCallback={this.deleteCallback.bind(this)}/>)}}/>
-                        </PanesDirective>
-                    </SplitterComponent>
-                </div>
-            </TabPanel>
+                        <TabPanel>
+                            <div className="mindmap-container">
+                                <SplitterComponent height="100%" width="100%" separatorSize={2}>
+                                    <PanesDirective>
+                                        <PaneDirective size="25%" min="0px" content={()=>{return(<TableView tasks={this.state.tasks} editCallback={this.editCallback.bind(this)} deleteCallback={this.deleteCallback.bind(this)}></TableView>)}}/>
+                                        <PaneDirective size="75%" min="60px" content={()=>{return(<MindMapContainer tasks={this.state.tasks} editCallback={this.editCallback.bind(this)} deleteCallback={this.deleteCallback.bind(this)}/>)}}/>
+                                    </PanesDirective>
+                                </SplitterComponent>
+                            </div>
+                        </TabPanel>
 
-            <TabPanel>
-                <div className="gantt-container">
-                    <GanttDiagram tasks={this.state.tasks} users={this.state.users} editCallback={this.editCallback.bind(this)} deleteCallback={this.deleteCallback.bind(this)}></GanttDiagram>
-                </div>
-            </TabPanel>
+                        <TabPanel>
+                            <div className="gantt-container">
+                                <GanttDiagram tasks={this.state.tasks} users={this.state.users} editCallback={this.editCallback.bind(this)} deleteCallback={this.deleteCallback.bind(this)}></GanttDiagram>
+                            </div>
+                        </TabPanel>
 
-            <TabPanel>
-                <div className="gantt-container">
-                    <KanbanBoard tasks={this.state.tasks} editCallback={this.editCallback.bind(this)} deleteCallback={this.deleteCallback.bind(this)}></KanbanBoard>
-                </div>
-            </TabPanel>
+                        <TabPanel>
+                            <div className="gantt-container">
+                                <KanbanBoard tasks={this.state.tasks} editCallback={this.editCallback.bind(this)} deleteCallback={this.deleteCallback.bind(this)}></KanbanBoard>
+                            </div>
+                        </TabPanel>
 
-            </Tabs>
-            
+                        </Tabs>
+                    </Route>
+                    </Switch>
+                </Router>
+                        
             </div>);
         }
     }
     
-    export default App;
+    export default withRouter(App);
     

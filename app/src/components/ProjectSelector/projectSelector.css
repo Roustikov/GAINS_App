@@ -1,0 +1,31 @@
+.centered {
+    position: absolute;
+    width: 400px;
+    height: 300px;
+    z-index: 15;
+    top: 50%;
+    left: 50%;
+    margin: -100px 0 0 -150px;
+    background: lightgray;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.title {
+    font-size: 2em;
+}
+
+.title-container {
+    margin-top: 20px;
+}
+
+div.input-group {
+    width: 50%;
+}
+
+.button-container {
+    margin-bottom: 20px;
+}
