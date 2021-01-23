@@ -15,6 +15,11 @@ import {
 class MindMapContainer extends React.Component {
     constructor(props) {
         super(props);
+        if(props.tasks.length) {
+            this.root_id = props.tasks[0].id;
+        } else {
+            this.root_id = 0;
+        }
     }
   render() {
       return(
@@ -35,7 +40,7 @@ class MindMapContainer extends React.Component {
                 id: 'id',
                 parentId: 'parent_id',
                 dataSource: new DataManager(this.props.tasks),
-                root: "0"
+                root: this.root_id
             }
         }
         //Sets the default properties for nodes and connectors
