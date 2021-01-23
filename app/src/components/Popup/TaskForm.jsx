@@ -3,8 +3,8 @@ var React = require('react');
 class TaskForm extends React.Component {
   constructor(props) {
     super(props);
+    this.tasks = props.dataProvider.getSimpleTaskList();
     this.state = this.getNewForm();
-    this.state.tasks = props.dataProvider.getSimpleTaskList();
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
@@ -19,11 +19,10 @@ class TaskForm extends React.Component {
   }
 
   getNewForm(){
-    let taskIds = this.props.dataProvider.getTaskIdList();
-    let nextId = Math.max(...taskIds)+1;
+    let depId = this.tasks.length != 0 ? this.tasks[0].id : 0;
     return (
     {
-      id: nextId,
+      id: 0,
       name: "New Task",
       start: new Date(),
       end: new Date(),
@@ -31,12 +30,16 @@ class TaskForm extends React.Component {
       assignee: 0,
       progress: 0,
       duration: 0,
-      dependency: 1,
+      dependency: depId,
       state: "ToDo"
     })
   }
 
   addTask = (event) => {
+    let parent_id = this.state.dependency;
+    if(parent_id === 0 || parent_id === '0') {
+      parent_id = null;
+    }
 
     let newTask = {
       name: this.state.name,
@@ -45,7 +48,7 @@ class TaskForm extends React.Component {
       end_date: new Date(this.state.end),
       duration: this.state.duration,
       progress: this.state.progress,
-      parent_id: parseInt(this.state.dependency),
+      parent_id: parseInt(parent_id),
       state: this.state.state
     };
     
@@ -126,9 +129,9 @@ class TaskForm extends React.Component {
           <select name="dependency"
             className="input-value"
             type="text"
-            value={this.state.dependencies}
+            value={this.state.dependency}
             onChange={this.handleInputChange}>
-            {this.props.dataProvider.getSimpleTaskList().map(task=>{return <option value={task.id} key={task.id}>{task.name}</option>})}
+            {this.tasks.map(task=>{return <option value={task.id} key={task.id}>{task.name}</option>})}
           </select>
         </div>
 
