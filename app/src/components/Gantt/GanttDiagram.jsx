@@ -36,11 +36,14 @@ class GanttDiagram extends React.Component {
             allowDeleting: true,
             mode: 'Auto'
         };
+        this.lastTasksCount = props.tasks.length;
     }
     
 componentDidUpdate(props) {
-    let gantt = this.ganttInstance;
-    gantt.refresh();
+    if(props.tasks !== undefined && props.tasks.length != this.lastTasksCount) {
+        this.lastTasksCount = props.tasks.length; // Fix for Gantt doesn't resresh on adding new task.
+        this.ganttInstance.refresh();
+    }
 }
 
 endEdit(event) {
@@ -49,6 +52,9 @@ endEdit(event) {
     }
     if(event.action === "Delete") {
         this.props.deleteCallback({data:[event.data.taskData], action: "delete"});
+    }
+    if(event.action === "delete") {
+        this.props.deleteCallback({data:[event.data[0].taskData], action: "delete"});
     }
 }
 
