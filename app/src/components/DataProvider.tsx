@@ -13,6 +13,7 @@ export default class DataProvider {
         predecessor?: string|undefined;
         project_id: number;
     }[];
+    projects: any;
     refreshCallback: any;
     mindMap: any;
     loaded: boolean;
@@ -22,26 +23,7 @@ export default class DataProvider {
         this.refreshCallback = refreshCallback;
         this.tasks = [];
         this.loaded = false;
-        this.currentProject = 1;
-
-        fetch("api/tasks/1/")
-        .then(response => {
-            if (response.status > 400) {              
-                    debugger;
-                    console.log("Something went wrong!");
-                    console.log(response);
-                    return { placeholder: "Something went wrong!" };
-            }
-            return response.json();
-        })
-        .then(data => {
-            this.tasks = data;
-            this.tasks.map(t=>{
-                t.duration = this.durationBetween(t.start_date, t.end_date);
-            });
-            this.loaded = true;
-            this.refreshCallback(this.tasks);
-        });
+        this.currentProject = 0;
 
         this.users = [
             {userId: 0,  fullName:"Unassigned"},
@@ -64,29 +46,77 @@ export default class DataProvider {
             {userId: 17, fullName:"Tyrion Lannister"}];    
     }
 
-    addTask(task: any){
-        task.project_id = this.currentProject;
-        this.postTask(task);
+    fetchProjectList(callback:any) {
+        fetch(`/api/projects/`)
+        .then(response => {
+            if (response.status > 400) {              
+                    debugger;
+                    console.log("Something went wrong!");
+                    console.log(response);
+                    return { placeholder: "Something went wrong!" };
+            }
+            return response.json();
+        })
+        .then(data => {
+            this.projects = data;
+            callback(data);
+        });
     }
 
-    postTask(task:any) {
-        this.sendRequest(task, `api/task/${task.id}/`, "POST", (data: any)=>{
+    fetchTasksForProject(projectId:number, callback: any) {
+        fetch(`/api/tasks/${projectId}/`)
+        .then(response => {
+            if (response.status > 400) {              
+                    debugger;
+                    console.log("Something went wrong!");
+                    console.log(response);
+                    return { placeholder: "Something went wrong!" };
+            }
+            return response.json();
+        })
+        .then(data => {
+            this.tasks = data;
+            this.tasks.map(t=>{
+                t.duration = this.durationBetween(t.start_date, t.end_date);
+            });
+            this.loaded = true;
+            callback();
+            this.refreshCallback(this.tasks);
+        });
+    }
+
+    addTask(task: any, callback: any){
+        task.project_id = this.currentProject;
+        this.postTask(task, callback);
+    }
+
+    postTask(task:any, callback: any) {
+        if(task.id < 0) {
+            task.id = 1;
+        }
+        
+        this.sendRequest(task, `/api/task/${task.id}/`, "POST", (data: any)=>{
             task.id = data.id;
             this.tasks.push(task);
-            this.refreshCallback(this.tasks);
+            callback(this.tasks);
         });
     }
     
     updateTask(task:any) {
         let taskToUpdate = this.getTaskWithId(task.id);
         this.copy(task, taskToUpdate);
-        this.sendRequest(task, `api/task/${task.id}/`, "PATCH", (data: any)=>{});
+        if(taskToUpdate?.predecessor === null) {
+            taskToUpdate.predecessor = '';
+        }
+
+        this.sendRequest(task, `/api/task/${task.id}/`, "PATCH", (data: any)=>{});
     }
 
     deleteTask(task:any) {
-        this.sendRequest(task, `api/task/${task.id}/`, "DELETE", (data: any)=>{
-            this.tasks = data['new-list'];
-            this.refreshCallback(this.tasks);
+        this.sendRequest(task, `/api/task/${task.id}/`, "DELETE", (data: any)=>{
+            this.fetchTasksForProject(this.currentProject, ()=>{
+                console.log(`Tasks for project ${this.currentProject} have been fetched successfully.`)
+            });
         });
     }
 
@@ -107,14 +137,14 @@ export default class DataProvider {
         fetch(url, requestOptions)
             .then(async response => {
                 if (!response.ok) {
-                    const data = await response.json();
+                    const data = await response.text();
                     // get error message from body or default to response status
                     const error = {
                         status: response.status,
                         statusText: response.statusText,
-                        errorText: data.assignee
+                        errorText: data
                     };
-                    return Promise.reject(error);
+                    return Promise.reject([error, requestOptions]);
                 }
                     let resp = response.json();
                     return resp;
@@ -164,6 +194,7 @@ export default class DataProvider {
         dest.end_date = source.end_date;
         dest.progress = source.progress;
         dest.description = source.description;
+        dest.predecessor = source.predecessor;
         dest.duration = source.duration;
         dest.project_id = source.project_id;
     }
