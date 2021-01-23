@@ -29,6 +29,7 @@ class ProjectSelector extends Component {
 
     openProject(e) {
         e.preventDefault();
+        this.dataProvider.currentProject = this.state.projectId;
         this.dataProvider.fetchTasksForProject(this.state.projectId, ()=>{
             this.props.history.push(`/tasks/${this.state.projectId}/`);
         });

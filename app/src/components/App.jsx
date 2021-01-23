@@ -42,11 +42,13 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        let pathArr = this.props.location.pathname.split('/');
-        this.dataProvider.currentProject = +pathArr[pathArr.length-2];
-        this.dataProvider.fetchTasksForProject(this.dataProvider.currentProject, ()=>{
-            console.log(`Tasks for project ${this.dataProvider.currentProject} have been fetched successfully.`)
-        });
+        if(this.props.location.pathname.includes('tasks')) { // First loading with direct URL like /tasks/1/
+            let pathArr = this.props.location.pathname.split('/');
+            this.dataProvider.currentProject = +pathArr[pathArr.length-2];
+            this.dataProvider.fetchTasksForProject(this.dataProvider.currentProject, ()=>{
+                console.log(`Tasks for project ${this.dataProvider.currentProject} have been fetched successfully.`)
+            });
+        }
     }
 
     refresh(tasks) {
@@ -84,6 +86,9 @@ class App extends React.Component {
                     <Route path="/tasks/:id/">
                         <Tabs>
                         <TabList>
+                        <a href="/">
+                        <button className="button add-task">Project List</button>
+                        </a>
                         <EditPopup addTaskCallback={this.addTask.bind(this)}
                             dataProvider={this.dataProvider}></EditPopup>
                         <Tab>Mind Map</Tab>
