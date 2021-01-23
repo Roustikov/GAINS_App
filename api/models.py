@@ -21,7 +21,7 @@ class Task(models.Model):
     end_date = models.DateField(blank=True)
     duration = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     progress = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
-    predecessor = models.CharField(max_length=100, blank=True)
+    predecessor = models.CharField(max_length=100, null= True, blank=True)
     parent_id = models.ForeignKey('Task', on_delete=models.CASCADE, null=True, blank=True)
     project_id = models.ForeignKey('Project', on_delete=models.CASCADE)
     def __str__(self):
