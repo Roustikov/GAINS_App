@@ -10,11 +10,14 @@ export default class KanbanBoard extends React.Component {
             { key: 'state', type: 'DropDown' },
             { key: 'progress', type: 'Numeric' },
         ];
+        this.lastTasksCount = props.tasks.length;
     }
 
     componentDidUpdate(props) {
-        let kanban = this.kanbanInstance;
-        kanban.refresh();
+        if(props.tasks !== undefined && props.tasks.length != this.lastTasksCount) {
+            this.lastTasksCount = props.tasks.length; // Fix for Kanban doesn't resresh on adding new task.
+            this.kanbanInstance.refresh();
+        }
     }
 
     actionComplete(event) {
