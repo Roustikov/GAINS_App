@@ -75,6 +75,14 @@ class App extends React.Component {
         });
     }
 
+    createCallback(event) {
+        if(Array.isArray(event.data)) {
+            event.data.map((t)=>{this.dataProvider.updateTask(t)});
+        } else {
+            this.dataProvider.updateTask(event.data)
+        }
+    }
+
     render() {
         return (
             <div className="App">
@@ -101,7 +109,7 @@ class App extends React.Component {
                                 <SplitterComponent height="100%" width="100%" separatorSize={2}>
                                     <PanesDirective>
                                         <PaneDirective size="25%" min="0px" content={()=>{return(<TableView tasks={this.state.tasks} editCallback={this.editCallback.bind(this)} deleteCallback={this.deleteCallback.bind(this)}></TableView>)}}/>
-                                        <PaneDirective size="75%" min="60px" content={()=>{return(<MindMapContainer tasks={this.state.tasks} editCallback={this.editCallback.bind(this)} deleteCallback={this.deleteCallback.bind(this)}/>)}}/>
+                                        <PaneDirective size="75%" min="60px" content={()=>{return(<MindMapContainer tasks={this.state.tasks} editCallback={this.editCallback.bind(this)} deleteCallback={this.deleteCallback.bind(this)} createCallback={this.createCallback.bind(this)}/>)}}/>
                                     </PanesDirective>
                                 </SplitterComponent>
                             </div>

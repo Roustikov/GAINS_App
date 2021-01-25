@@ -104,6 +104,13 @@ export default class DataProvider {
     
     updateTask(task:any) {
         let taskToUpdate = this.getTaskWithId(task.id);
+        if(taskToUpdate === undefined) { //New task created via MindMap
+            this.addTask(task, ()=>{
+                console.log(`Task: ${task} Created via MindMap.`);
+            });
+            return;
+        }
+
         this.copy(task, taskToUpdate);
         if(taskToUpdate?.predecessor === null) {
             taskToUpdate.predecessor = '';

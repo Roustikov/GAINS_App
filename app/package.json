@@ -43,7 +43,7 @@
   },
   "scripts": {
     "dev": "webpack --progress --config ./webpack.config.js",
-    "prod": "webpack --config ./webpack.config.prod.js"
+    "prod": "webpack --progress --config ./webpack.config.prod.js"
   },
   "eslintConfig": {
     "extends": [
