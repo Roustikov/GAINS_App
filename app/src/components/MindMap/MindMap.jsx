@@ -6,9 +6,10 @@ import {
     MindMap,
     NodeConstraints,
     Keys,
-    KeyModifiers
+    KeyModifiers,
+    ToolBase, 
+    SelectorConstraints,
 } from "@syncfusion/ej2-react-diagrams";
-
 import {
     DataManager
 } from '@syncfusion/ej2-data';
@@ -25,27 +26,6 @@ class MindMapContainer extends React.Component {
         }
     }
 
-    getTaskTemplate(current) {
-        let date = new Date();
-        return {
-            id: "newNode"+ + date, // int conversion -> Date in milliseconds
-            data:{
-                assignee: 1,
-                description: "",
-                duration: 303,
-                id: 0,
-                name: "New Node",
-                parent_id: current.data.id,
-                predecessor: "",
-                progress: "50.00",
-                project_id: 1,
-                start_date: date.toLocaleDateString('en-CA'),
-                end_date: date.toLocaleDateString('en-CA'),
-                state: "ToDo"
-                }
-            };
-    }
-
     //Custom command for Diagraming elements.
     getCommandManagerSettings() {
         let commandManager = {
@@ -56,22 +36,7 @@ class MindMapContainer extends React.Component {
                         return true;
                     },
                     execute: (() => {
-                        let current = diagramInstance.selectedItems.nodes[0];
-                        let newNode = this.getTaskTemplate(current);
-                        
-                        let connector = {
-                            type: 'Bezier',
-                            sourceID: current.id ,
-                            targetID: newNode.id,
-                        };
-                        
-                        diagramInstance.add(newNode);
-                        diagramInstance.add(connector);
-                        diagramInstance.doLayout();
-                        let node = diagramInstance.getObject(newNode.id);
-                        diagramInstance.clearSelection();
-                        diagramInstance.select([node]);
-                        diagramInstance.startTextEdit();
+                        addNode();
                     }).bind(this),
                     gesture: { key: Keys.Tab }
                 },
@@ -274,17 +239,116 @@ class MindMapContainer extends React.Component {
                     this.props.deleteCallback({data: [event.element.data], action: "delete"});
                 }
             }
-            if(event.name === "collectionChange" && event.type === "Addition" && event.cause === 2) {
+            // Manual (cause === 2) or programmatical (cause === 10 || cause === 14) item addition
+            if(event.name === "collectionChange" && event.type === "Addition" && (event.cause === 2 || event.cause === 10)) {
                 if(event.element.data) {
                     this.props.createCallback({data: [event.element.data], action: "create"});
                 }
             }
         }}
         keyDown={this.onKeyDown}
+
+
+        selectionChange={(arg) => {
+            if (arg.state === "Changing") {
+                if (arg.newValue[0] !== undefined && arg.newValue[0].data !== undefined) {
+                    for (let handle of diagramInstance.selectedItems
+                        .userHandles) {
+                        handle.visible = true;
+                    }
+                }
+                else {
+                    hideUserHandle("addNode");
+                }
+            }
+        }}
+        selectedItems={{
+            constraints: SelectorConstraints.UserHandle,
+            userHandles: 
+            [
+                {
+                    name: "addNode",
+                    pathData: "M10 1 h10 v10 h10 v10 h-10 v10 h-10 v-10 h-10 v-10 h10 z",
+                    backgroundColor: "black",
+                    pathColor: "white",
+                    side: "Left",
+                    offset: 1,
+                    margin: { top: 10, bottom: 0, left: 0, right: -10 },
+                    horizontalAlignment: "Left",
+                    verticalAlignment: "Top"
+                }
+            ]
+        }}
+        getCustomTool={(action)=>{if(action === "addNode") {return new AddTool(diagramInstance.commandHandler)}}}
+
         ><Inject services = {[DataBinding, MindMap]}/>
         </DiagramComponent>
       )
   }
 }
 
+let addNode = function() {
+    let current = diagramInstance.selectedItems.nodes[0];
+    let newNode = getTaskTemplate(current);
+    
+    let connector = {
+        type: 'Bezier',
+        sourceID: current.id ,
+        targetID: newNode.id,
+    };
+    
+    let node = diagramInstance.add(newNode);
+    diagramInstance.add(connector);
+    diagramInstance.doLayout();
+    diagramInstance.bringIntoView(node.wrapper.bounds);
+    diagramInstance.select([node], false);
+    diagramInstance.startTextEdit();
+}
+
+let getTaskTemplate = function(current) {
+    let date = new Date();
+    return {
+        id: "newNode"+ + date, // int conversion -> Date in milliseconds
+        data:{
+            assignee: 1,
+            description: "",
+            duration: 303,
+            id: 0,
+            name: "New Node",
+            parent_id: current.data.id,
+            predecessor: "",
+            progress: "50.00",
+            project_id: 1,
+            start_date: date.toLocaleDateString('en-CA'),
+            end_date: date.toLocaleDateString('en-CA'),
+            state: "ToDo"
+            }
+        };
+}
+
 export default MindMapContainer;
+
+function hideUserHandle(name) {
+    for (let handle of diagramInstance.selectedItems.userHandles) {
+        if (handle.name === name) {
+            handle.visible = false;
+        }
+    }
+}
+
+class AddTool extends ToolBase {
+    mouseDown(args) {
+        super.mouseDown(args);
+        this.inAction = true;
+    }
+    mouseUp(args) {
+        if (this.inAction) {
+            let selectedObject = this.commandHandler.getSelectedObject();
+            if (selectedObject[0]) {
+                if (selectedObject[0].data !== undefined) {
+                    addNode();
+                }
+            }
+        }
+    }
+}

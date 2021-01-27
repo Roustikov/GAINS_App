@@ -102,10 +102,11 @@ export default class DataProvider {
         });
     }
     
-    updateTask(task:any) {
+    updateTask(task:any, callback:any) {
         let taskToUpdate = this.getTaskWithId(task.id);
         if(taskToUpdate === undefined) { //New task created via MindMap
             this.addTask(task, ()=>{
+                callback(task);
                 console.log(`Task: ${task} Created via MindMap.`);
             });
             return;
@@ -120,7 +121,7 @@ export default class DataProvider {
             taskToUpdate.name = ' ';
         }
 
-        this.sendRequest(task, `/api/task/${task.id}/`, "PATCH", (data: any)=>{});
+        this.sendRequest(task, `/api/task/${task.id}/`, "PATCH", (data: any)=>{callback(data)});
     }
 
     deleteTask(task:any) {

@@ -62,11 +62,10 @@ class App extends React.Component {
 
     editCallback(event) {
         if(Array.isArray(event.data)) {
-            event.data.map((t)=>{this.dataProvider.updateTask(t)});
+            event.data.map((t)=>{this.dataProvider.updateTask(t, ()=>{this.refresh()})});
         } else {
-            this.dataProvider.updateTask(event.data)
+            this.dataProvider.updateTask(event.data, ()=>{this.refresh()})
         }
-        this.refresh();
     }
 
     deleteCallback(event) {
@@ -77,9 +76,9 @@ class App extends React.Component {
 
     createCallback(event) {
         if(Array.isArray(event.data)) {
-            event.data.map((t)=>{this.dataProvider.updateTask(t)});
+            event.data.map((t)=>{this.dataProvider.updateTask(t, ()=>{})});
         } else {
-            this.dataProvider.updateTask(event.data)
+            this.dataProvider.updateTask(event.data, ()=>{})
         }
     }
 
