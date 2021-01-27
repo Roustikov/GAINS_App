@@ -116,6 +116,10 @@ export default class DataProvider {
             taskToUpdate.predecessor = '';
         }
 
+        if(taskToUpdate.name === "") {
+            taskToUpdate.name = ' ';
+        }
+
         this.sendRequest(task, `/api/task/${task.id}/`, "PATCH", (data: any)=>{});
     }
 
