@@ -76,28 +76,6 @@ class MindMapContainer extends React.Component {
                     gesture: { key: Keys.Tab }
                 },
                 {
-                    name: "createSibling",
-                    canExecute: () => {
-                        return true;
-                    },
-                    execute: (() => {
-                        let current = diagramInstance.selectedItems.nodes[0];
-                        let newNode = this.getTaskTemplate(current);
-                        let parentConnector = diagramInstance.getObject(current.inEdges[0]);
-                        
-                        let connector = {
-                            type: 'Bezier',
-                            sourceID: parentConnector.sourceID,
-                            targetID: newNode.id,
-                        };
-                        
-                        diagramInstance.add(newNode);
-                        diagramInstance.add(connector);
-                        diagramInstance.doLayout();
-                    }).bind(this),
-                    gesture: { key: Keys.Enter }
-                },
-                {
                     name: "navigationDown",
                     canExecute: () => {
                         return true;
@@ -105,7 +83,7 @@ class MindMapContainer extends React.Component {
                     execute: () => {
                         this.navigateToChild();
                     },
-                    gesture: { key: Keys.Down }
+                    gesture: { key: Keys.Left }
                 },
                 {
                     name: "navigationUp",
@@ -115,7 +93,7 @@ class MindMapContainer extends React.Component {
                     execute: () => {
                         this.navigateToParent();
                     },
-                    gesture: { key: Keys.Up }
+                    gesture: { key: Keys.Right }
                 },
                 {
                     name: "navigationLeft",
@@ -125,7 +103,7 @@ class MindMapContainer extends React.Component {
                     execute: () => {
                         this.navigateToRighttSibling();
                     },
-                    gesture: { key: Keys.Right }
+                    gesture: { key: Keys.Down }
                 },
                 {
                     name: "navigationRight",
@@ -135,7 +113,7 @@ class MindMapContainer extends React.Component {
                     execute: () => {
                         this.navigateToLeftSibling();
                     },
-                    gesture: { key: Keys.Left }
+                    gesture: { key: Keys.Up }
                 }
             ]
         };
@@ -217,6 +195,13 @@ class MindMapContainer extends React.Component {
         return parentNode;
     }
 
+    onKeyDown(event) {
+        if(event.key === "Enter" && event.keyModifiers !== 4) {
+            diagramInstance.endEdit();
+            event.isHandled = true;
+        }
+    }
+
   render() {
       return(
         <DiagramComponent id = "diagram"
@@ -295,6 +280,7 @@ class MindMapContainer extends React.Component {
                 }
             }
         }}
+        keyDown={this.onKeyDown}
         ><Inject services = {[DataBinding, MindMap]}/>
         </DiagramComponent>
       )
