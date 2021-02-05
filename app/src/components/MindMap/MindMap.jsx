@@ -7,6 +7,7 @@ import {
     NodeConstraints,
     Keys,
     KeyModifiers,
+    UndoRedo,
     ToolBase, 
     SelectorConstraints,
 } from "@syncfusion/ej2-react-diagrams";
@@ -160,10 +161,50 @@ class MindMapContainer extends React.Component {
         return parentNode;
     }
 
+    getParentNodeViaConnector(name) {
+        let parentNode = [];
+        let node = diagramInstance.getObject(name);
+        let connector = diagramInstance.getObject(node.inEdges[0]);
+        if (connector) {
+            parentNode.push(diagramInstance.getObject(connector.sourceID));
+        }
+        return parentNode;
+    }
+
     onKeyDown(event) {
         if(event.key === "Enter" && event.keyModifiers !== 4) {
             diagramInstance.endEdit();
             event.isHandled = true;
+        }
+    }
+
+    distanceBetween(nodeA, nodeB) {
+        return Math.pow((nodeA.offsetX - nodeB.offsetX),2) + Math.pow((nodeA.offsetY - nodeB.offsetY),2);
+    }
+
+    closestNodeTo(targetNode) {
+        let closestNode = {};
+        let closestDist = Infinity;
+
+        diagramInstance.nodes.map((node)=>{
+            let dist = this.distanceBetween(node, targetNode);
+            if(dist < closestDist && node.id !== targetNode.id) {
+                closestNode = node;
+                closestDist = dist;
+            }
+        });
+        return {closestNode, closestDist};
+    }
+
+    nodeIsNotDescendantOf(closestNode, node) {
+        if(closestNode.data.parent_id) {
+            if(closestNode.data.parent_id != node.data.id){
+                return this.nodeIsNotDescendantOf(this.getParentNodeViaConnector(closestNode.id)[0], node);
+            } else {
+                return false;
+            }
+        } else {
+            return true;
         }
     }
 
@@ -233,6 +274,15 @@ class MindMapContainer extends React.Component {
             event.element.data.name = event.newValue;
             this.props.editCallback({data: event.element.data, action: "save"});
         }}
+        historyChange={(event) => {
+            let maxConnectionDist = 5000;
+            let node = event.source[0];
+            let {closestNode, closestDist} = this.closestNodeTo(node);
+            if(closestDist < maxConnectionDist && this.nodeIsNotDescendantOf(closestNode, node)) {
+                node.data.parent_id = closestNode.data.id;
+                this.props.editCallback({data: node.data, action: "save"});
+            }
+        }}
         collectionChange={(event) => {
             if(event.name === "collectionChange" && event.type === "Removal" && event.cause === 2) {
                 if(event.element.data) { // Trigger Delete only for block, not the connector line
@@ -281,7 +331,7 @@ class MindMapContainer extends React.Component {
         }}
         getCustomTool={(action)=>{if(action === "addNode") {return new AddTool(diagramInstance.commandHandler)}}}
 
-        ><Inject services = {[DataBinding, MindMap]}/>
+        ><Inject services = {[DataBinding, MindMap, UndoRedo]}/>
         </DiagramComponent>
       )
   }
