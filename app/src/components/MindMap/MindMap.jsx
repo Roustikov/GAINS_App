@@ -26,7 +26,17 @@ class MindMapContainer extends React.Component {
             this.root_id = 0;
         }
     }
-
+    componentDidMount(){
+        let body = document.getElementsByTagName("body")[0];
+        body.onkeydown = (function (e) 
+        {
+            var keycode1 = (e.keyCode ? e.keyCode : e.which);
+            if (keycode1 == 0 || keycode1 == 9) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+    }
     //Custom command for Diagraming elements.
     getCommandManagerSettings() {
         let commandManager = {
@@ -272,7 +282,7 @@ class MindMapContainer extends React.Component {
         }
         textEdit={(event) => {
             event.element.data.name = event.newValue;
-            this.props.editCallback({data: event.element.data, action: "save"});
+            this.props.editCallback({data: event.element.data, action: "save"}, true);
         }}
         historyChange={(event) => {
             let maxConnectionDist = 5000;
@@ -330,7 +340,6 @@ class MindMapContainer extends React.Component {
             ]
         }}
         getCustomTool={(action)=>{if(action === "addNode") {return new AddTool(diagramInstance.commandHandler)}}}
-
         ><Inject services = {[DataBinding, MindMap, UndoRedo]}/>
         </DiagramComponent>
       )

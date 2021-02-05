@@ -60,11 +60,11 @@ class App extends React.Component {
         this.dataProvider.addTask(taskData, this.refresh.bind(this));
     }
 
-    editCallback(event) {
+    editCallback(event, suppressRefresh) {
         if(Array.isArray(event.data)) {
-            event.data.map((t)=>{this.dataProvider.updateTask(t, ()=>{this.refresh()})});
+            event.data.map((t)=>{this.dataProvider.updateTask(t, ()=>{if(!suppressRefresh){this.refresh()}})});
         } else {
-            this.dataProvider.updateTask(event.data, ()=>{this.refresh()})
+            this.dataProvider.updateTask(event.data, ()=>{if(!suppressRefresh){this.refresh()}})
         }
     }
 
