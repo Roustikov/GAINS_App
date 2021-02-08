@@ -35,12 +35,57 @@ class MindMapContainer extends React.Component {
                 e.preventDefault();
                 e.stopPropagation();
             }
+            if(e.key === "Enter" && e.keyModifiers !== 4) {
+                e.preventDefault();
+                e.stopPropagation();
+                if(diagramInstance.textEditing === true) { // End text edit without interrupting Tab key functionality
+                    let evt = new KeyboardEvent(
+                        'keydown', {
+                            'altKey': false,
+                            'bubbles': true,
+                            'cancelBubble': false,
+                            'cancelable': true,
+                            'charCode': 0,
+                            'code': "Escape",
+                            'composed': true,
+                            'ctrlKey': false,
+                            'currentTarget': body,
+                            'defaultPrevented': true,
+                            'detail': 0,
+                            'eventPhase': 3,
+                            'isComposing': false,
+                            'isTrusted': true,
+                            'key': "Escape",
+                            'keyCode': 27,
+                            'location': 0,
+                            'metaKey': false,
+                            'repeat': false,
+                            'returnValue': false,
+                            'shiftKey': false,
+                            'type': "keydown",
+
+                        });
+                    e.target.dispatchEvent(evt);
+                } else {
+                    diagramInstance.startTextEdit();
+                }
+            }
         });
     }
     //Custom command for Diagraming elements.
     getCommandManagerSettings() {
         let commandManager = {
             commands: [
+                {
+                    name: "selectFocusedItem",
+                    canExecute: () => {
+                        return false;
+                    },
+                    execute: (() => {
+                        diagramInstance.startEdit();
+                    }).bind(this),
+                    gesture: { key: Keys.Enter }
+                },
                 {
                     name: "createChild",
                     canExecute: () => {
@@ -180,14 +225,6 @@ class MindMapContainer extends React.Component {
         }
         return parentNode;
     }
-
-    onKeyDown(event) {
-        if(event.key === "Enter" && event.keyModifiers !== 4) {
-            diagramInstance.endEdit();
-            event.isHandled = true;
-        }
-    }
-
     distanceBetween(nodeA, nodeB) {
         return Math.pow((nodeA.offsetX - nodeB.offsetX),2) + Math.pow((nodeA.offsetY - nodeB.offsetY),2);
     }
@@ -306,9 +343,6 @@ class MindMapContainer extends React.Component {
                 }
             }
         }}
-        keyDown={this.onKeyDown}
-
-
         selectionChange={(arg) => {
             if (arg.state === "Changing") {
                 if (arg.newValue[0] !== undefined && arg.newValue[0].data !== undefined) {
